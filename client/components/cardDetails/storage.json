@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "img": "https://images.pexels.com/photos/17484975/pexels-photo-17484975.png",
+    "Name": "Thought Processing",
+    "Details": "Build clarity of thought, strengthen focus and concentration, improve logical and analytical thinking, expand creative thinking, strengthen memory and retention."
+  },
+  {
+    "id": 2,
+    "img": "https://images.unsplash.com/photo-1603804449836-b2e7d05a7bd0?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHNsZWVwJTIwY3ljbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "Name": "Sleep Cycle",
+    "Details": "Maintain a consistent sleep schedule, get 7-9 hours of sleep, avoid screens before bed, practice relaxation techniques, improve sleep quality and alertness."
+  },
+  {
+    "id": 3,
+    "img": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=998",
+    "Name": "Meditation Practice",
+    "Details": "Practice daily mindfulness or guided meditation, focus on breathing, reduce stress, enhance focus, increase self-awareness, and promote emotional stability."
+  },
+  {
+    "id": 4,
+    "img": "https://plus.unsplash.com/premium_photo-1689177356594-b988a1cc45ff?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8QU54aWV0eXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=1000",
+    "Name": "Manage Anxiety",
+    "Details": "Identify triggers, practice deep breathing and relaxation, engage in regular exercise, maintain a healthy routine, use positive self-talk, and seek support when needed."
+  },
+  {
+    "id": 5,
+    "img": "https://plus.unsplash.com/premium_photo-1739123854182-339bb87b89fa?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c3RyZXNzJTIwY3ljbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=1000",
+    "Name": "Stress Cycle",
+    "Details": "Recognize signs of stress, break tasks into manageable steps, use time management, practice mindfulness and relaxation, maintain social support, and establish healthy habits."
+  },
+  {
+    "id": 6,
+    "img": "https://plus.unsplash.com/premium_photo-1661767467261-4a4bed92a507?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW50ZXJhY3Rpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=1000",
+    "Name": "Being Interactive",
+    "Details": "Engage actively in conversations, listen attentively, ask thoughtful questions, share ideas clearly, collaborate effectively, and build strong interpersonal skills."
+  }
+]
