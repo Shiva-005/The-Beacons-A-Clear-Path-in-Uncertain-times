@@ -3,7 +3,16 @@ import Header from "@/components/Header";
 import { motion, Variants } from "framer-motion";
 import Data from "../components/cardDetails/storage.json";
 type Img = { src: string; ratio: string };
-
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/firebase/firebaseConfig";
+const handleGoogleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    console.log("User:", result.user);
+  } catch (error) {
+    console.error("Google login error:", error);
+  }
+};
 const fadeSlide: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
@@ -215,9 +224,12 @@ export default function Index() {
                   </button>
 
                   <div className="text-center space-y-2">
-                    <a href="#" className="text-black text-lg underline block">
-                      Google Account
-                    </a>
+                    <button
+                      onClick={handleGoogleLogin}
+                      className="w-full bg-white text-black border-2 border-gray-400 py-3 rounded-lg font-lato hover:bg-gray-100 transition-colors"
+                    >
+                      WITH GMAIL📩
+                    </button>
                     <a href="/signup" className="text-blue-600 text-2xl block">
                       Sign Up
                     </a>

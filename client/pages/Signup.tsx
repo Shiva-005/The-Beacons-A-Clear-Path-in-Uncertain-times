@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import { motion, Variants } from "framer-motion";
+import { auth, db, googleProvider } from "../firebase/firebaseConfig";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 type Img = { src: string; ratio: string };
 
@@ -27,9 +30,50 @@ const Signup = () => {
   const [year, setYear] = useState("");
   const [branch, setBranch] = useState("");
 
-  const handleSignup = (e: React.FormEvent) => {
+  // ✅ Handle Email/Password Signup
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup Data:", { name, age, year, branch, email, password });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Store additional user data in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        age,
+        year,
+        branch,
+        createdAt: new Date(),
+      });
+
+      alert("Signup successful!");
+     
+      setEmail(""); setPassword(""); setName(""); setAge(""); setYear(""); setBranch("");
+    } catch (error: any) {
+      console.error("Error signing up:", error);
+      alert(error.message);
+    }
+  };
+
+  // ✅ Optional: Google Signup
+  const handleGoogleSignup = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: new Date(),
+      });
+
+      alert("Google Signup successful!");
+    } catch (error: any) {
+      console.error("Google signup error:", error);
+      alert(error.message);
+    }
   };
 
   // ✅ Background image rows
@@ -74,6 +118,7 @@ const Signup = () => {
     { src: "https://api.builder.io/api/v1/image/assets/TEMP/4717ac53571d3925daec07823c7b336e0c523ad0?width=432", ratio: "4/3" },
     { src: "https://api.builder.io/api/v1/image/assets/TEMP/b08fd0c396ed2556ed78c4017344871fa14926b8?width=400", ratio: "3/2" },
   ];
+console.log("Form data:", { name, email, age, year, branch });
 
   return (
     <section className="relative min-h-[900px] bg-white">
@@ -83,11 +128,8 @@ const Signup = () => {
         <ImageRow imgs={row2} rowIdx={10} />
         <ImageRow imgs={row3} rowIdx={20} />
       </div>
-
-
       <div className="absolute inset-0 bg-black/55 z-10"></div>
 
-  
       <Header />
 
       <motion.div
@@ -204,7 +246,16 @@ const Signup = () => {
                 Create Account
               </button>
 
-              <div className="text-center space-y-2">
+              {/* Optional Google Signup */}
+              <button
+                type="button"
+                onClick={handleGoogleSignup}
+                className="w-full mt-4 bg-blue-500 text-white text-xl md:text-2xl py-4 rounded-lg font-lato hover:bg-blue-600 transition-colors"
+              >
+                Sign Up with Google
+              </button>
+
+              <div className="text-center space-y-2 mt-4">
                 <a href="/" className="text-blue-600 text-2xl block">
                   Back to Login
                 </a>
