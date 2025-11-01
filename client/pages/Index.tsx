@@ -187,7 +187,7 @@ export default function Index() {
               variants={fadeSlide}
               className="flex justify-center lg:justify-end"
             >
-              <div className="w-full max-w-md bg-gray-200/40 backdrop-blur-sm rounded-[50px] p-8 md:p-12">
+              <div className="w-full max-w-md bg-white/40 backdrop-blur-sm rounded-[50px] p-8 m-4 md:p-12">
                 <form onSubmit={handleLogin} className="space-y-6">
                   <div>
                     <label className="text-xl md:text-2xl font-lato text-gray-900">
@@ -482,7 +482,7 @@ export default function Index() {
       </section>
 
       {/* Connect with Experts */}
-      <section className="py-16 bg-beacon-teal rounded-[60px] mx-4 my-16">
+      <section className="py-16 bg-beacon-teal rounded-[60px] mx-4 my-16 px-4">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">

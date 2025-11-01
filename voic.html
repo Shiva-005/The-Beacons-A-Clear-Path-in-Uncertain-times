@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mental Health Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #b8c6db 0%, #f5f7fa 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .question {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s ease;
+            position: absolute;
+            width: 100%;
+        }
+
+        .question.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            display: block;
+            background: #f3f4f6;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .options label:hover {
+            background: #e0ebff;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056c7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .mild {
+            color: green;
+        }
+
+        .moderate {
+            color: orange;
+        }
+
+        .severe {
+            color: red;
+        }
+
+        .explore-btn {
+            background: #28a745;
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 17px;
+        }
+
+        .explore-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h2>Mental Health Self-Assessment</h2>
+        <form id="quizForm"></form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            "Little interest or pleasure in doing things",
+            "Feeling down, depressed, or hopeless",
+            "Trouble sleeping or sleeping too much",
+            "Feeling tired or having little energy",
+            "Poor appetite or overeating",
+            "Feeling nervous, anxious, or on edge",
+            "Not being able to stop worrying",
+            "Trouble relaxing",
+            "Feeling irritable or easily annoyed",
+            "Feeling afraid as if something awful might happen",
+            "Have you been able to concentrate well?",
+            "Have you been feeling confident in yourself?",
+            "Have you felt capable of making decisions?",
+            "Have you enjoyed your daily activities?",
+            "Have you felt unhappy or depressed?"
+        ];
+
+        const options = [
+            "Not at all",
+            "Several days",
+            "More than half the days",
+            "Nearly every day"
+        ];
+
+        let current = 0;
+        let answers = [];
+
+        const form = document.getElementById("quizForm");
+        const resultDiv = document.getElementById("result");
+
+        function showQuestion(index) {
+            form.innerHTML = "";
+            if (index < questions.length) {
+                const qDiv = document.createElement("div");
+                qDiv.classList.add("question", "active");
+                qDiv.innerHTML = `
+          <h3>${index + 1}. ${questions[index]}</h3>
+          <div class="options">
+            ${options
+                        .map(
+                            (opt, i) => `
+              <label>
+                <input type="radio" name="q${index}" value="${i}" ${answers[index] === i ? "checked" : ""
+                                }> ${opt}
+              </label>
+            `
+                        )
+                        .join("")}
+          </div>
+          <div class="buttons">
+            <button type="button" id="prevBtn" ${index === 0 ? "disabled" : ""
+                    }>← Prev</button>
+            <button type="button" id="nextBtn">${index === questions.length - 1 ? "Submit" : "Next →"
+                    }</button>
+          </div>
+        `;
+                form.appendChild(qDiv);
+
+                document
+                    .getElementById("nextBtn")
+                    .addEventListener("click", nextQuestion);
+                document
+                    .getElementById("prevBtn")
+                    .addEventListener("click", prevQuestion);
+            } else {
+                calculateResult();
+            }
+        }
+
+        function nextQuestion() {
+            const selected = form.querySelector(`input[name="q${current}"]:checked`);
+            if (!selected) {
+                alert("Please select an answer before continuing!");
+                return;
+            }
+            answers[current] = parseInt(selected.value);
+            current++;
+            if (current < questions.length) {
+                form.querySelector(".question").classList.remove("active");
+                showQuestion(current);
+            } else {
+                calculateResult();
+            }
+        }
+
+        function prevQuestion() {
+            if (current > 0) {
+                current--;
+                showQuestion(current);
+            }
+        }
+
+        function calculateResult() {
+            const total = answers.reduce((a, b) => a + b, 0);
+            let text = "";
+            if (total <= 10) {
+                text = `<span class="mild">Mild (Score: ${total}) 🟢</span><br>Mild — Try Yoga, Folk Music & Story Therapy 🌿`;
+            } else if (total <= 25) {
+                text = `<span class="moderate">Moderate (Score: ${total}) 🟡</span><br>Moderate — Peer Support & Thought Detox 🧠`;
+            } else {
+                text = `<span class="severe">Severe (Score: ${total}) 🔴</span><br>Severe — Counsellor Support & Scheduled Meeting ❤️`;
+            }
+
+            form.innerHTML = "";
+            resultDiv.innerHTML = `
+        ${text}
+        <button class="explore-btn" onclick="window.location.href='https://yourwebsite.com/services'">
+          🌐 Explore Services
+        </button>
+      `;
+        }
+
+        showQuestion(current);
+    </script>
+</body>
+
+</html>

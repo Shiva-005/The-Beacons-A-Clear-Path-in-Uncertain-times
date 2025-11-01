@@ -24,6 +24,7 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "firebase": "^12.4.0",
+    "react-calendar-heatmap": "^1.10.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
