@@ -8,14 +8,7 @@ type Img = { src: string; ratio: string };
 import { auth, googleProvider,db } from "@/firebase/firebaseConfig";
 import { getDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
-const handleGoogleLogin = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    console.log("User:", result.user);
-  } catch (error) {
-    console.error("Google login error:", error);
-  }
-};
+
 const fadeSlide: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
@@ -119,6 +112,7 @@ e.preventDefault();
 try {
 setLoading(true);
 const result = await signInWithEmailAndPassword(auth, email, password);
+alert("Login Successfully");
 await redirectBasedOnRole(result.user.uid);
 } catch (err) {
 console.error(err);
@@ -198,7 +192,7 @@ setLoading(false);
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/55 z-10"></div>
 
-        {/* Header */}
+      
         <Header />
 
         {/* Hero content */}
@@ -230,7 +224,7 @@ setLoading(false);
               className="flex justify-center lg:justify-end"
             >
               <div className="w-full max-w-md bg-white/40 backdrop-blur-sm rounded-[50px] py-10 m-10  px-10 md:p-10">
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleEmailLogin} className="space-y-6">
                   <div>
                     <label className="text-xl md:text-2xl font-lato text-gray-900">
                       Email

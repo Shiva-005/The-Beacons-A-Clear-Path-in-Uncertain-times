@@ -1,5 +1,7 @@
 import { useState } from "react";
-
+import { auth, db, googleProvider } from "../firebase/firebaseConfig";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, setDoc,collection, addDoc } from "firebase/firestore";
 const questions = [
   "Little interest or pleasure in doing things",
   "Feeling down, depressed, or hopeless",
@@ -40,22 +42,46 @@ export default function MentalHealthQuiz() {
   const prev = () => current > 0 && setCurrent(current - 1);
 const [servicePage, setServicePage] = useState<string>("");
 
-const calculate = () => {
+const calculate = async() => {
+  if (!auth.currentUser) {
+  console.log("❌ No user logged in");
+  return;
+}
+
   const total = answers.reduce((a, b) => a + b, 0);
  let feedback = "";
   let  page= "";
+    let severity = "";
 
   if (total <= 20) {
     feedback = `🟢 Mild (Score: ${total}) — Try Yoga, Music & Journals`;
-    page = "/mild"; // page for mild
+    page = "/mild"; 
+      let severity = "";
   } else if (total <= 25) {
     feedback = `🟡 Moderate (Score: ${total}) — Peer Support & Positive Talk`;
-    page = "/moderate"; // page for moderate
+    page = "/moderate"; 
+      let severity = "";
   } else {
     feedback = `🔴 Severe (Score: ${total}) — Consider Professional Counselling`;
-    page = "/Severe"; // page for severe
+    page = "/Severe"; 
+      severity = "severe";
   }
+ const user = auth.currentUser;
+  if (user) {
+    try {
+      const quizRef = collection(db, "users", user.uid, "mental_health_quiz");
+      await addDoc(quizRef, {
+        answers,
+        score: total,
+        severity,
+        timestamp: new Date(),
+      });
 
+      console.log("✅ Quiz saved to Firestore!");
+    } catch (error) {
+      console.error("🔥 Error saving quiz:", error);
+    }
+  }
   setResult(feedback);
   setServicePage(page); // store page URL
 };
