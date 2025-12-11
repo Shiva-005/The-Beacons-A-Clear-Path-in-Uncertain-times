@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import { motion, Variants } from "framer-motion";
@@ -8,6 +9,7 @@ type Img = { src: string; ratio: string };
 import { auth, googleProvider,db } from "@/firebase/firebaseConfig";
 import { getDoc, doc } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 const fadeSlide: Variants = {
   hidden: { opacity: 0, y: 20 },
@@ -76,6 +78,15 @@ export default function Index() {
   const [showCards, setShowCards] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+
+ useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+       setIsLoggedIn(!!user); 
+    });
+    return () => unsub();
+  }, []);
   const redirectBasedOnRole = async (uid: string) => {
 const userRef = doc(db, "users", uid);
 const userSnap = await getDoc(userRef);
@@ -99,6 +110,7 @@ try {
 setLoading(true);
 const result = await signInWithPopup(auth, googleProvider);
 await redirectBasedOnRole(result.user.uid);
+setIsLoggedIn(true);
 } catch (err) {
 console.error(err);
 alert("Google login failed");
@@ -114,6 +126,7 @@ setLoading(true);
 const result = await signInWithEmailAndPassword(auth, email, password);
 alert("Login Successfully");
 await redirectBasedOnRole(result.user.uid);
+setIsLoggedIn(true);
 } catch (err) {
 console.error(err);
 alert("Invalid credentials");
@@ -182,103 +195,93 @@ setLoading(false);
   return (
     <div className="w-full overflow-x-hidden">
       {/* HERO with background image rows */}
-      <section className="relative min-h-[900px] bg-white">
-        <div className="absolute inset-0 overflow-hidden -z-0">
-          <ImageRow imgs={row1} rowIdx={0} />
-          <ImageRow imgs={row2} rowIdx={10} />
-          <ImageRow imgs={row3} rowIdx={20} />
-        </div>
+      <Header />
+    {!isLoggedIn && (
+  <section className="relative min-h-[900px] bg-white">
+    <div className="absolute inset-0 overflow-hidden -z-0">
+      <ImageRow imgs={row1} />
+      <ImageRow imgs={row2} rowIdx={10} />
+      <ImageRow imgs={row3} rowIdx={20} />
+    </div>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/55 z-10"></div>
+    <div className="absolute inset-0 bg-black/55 z-10"></div>
+    
 
-      
-        <Header />
+    <motion.div
+      className="relative z-20 container mx-auto px-4 py-12 lg:py-20"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true }}
+      variants={fadeSlide}
+    >
+      <div className="grid lg:grid-cols-2 gap-8 items-center">
 
-        {/* Hero content */}
-        <motion.div
-          className="relative z-20 container mx-auto px-4 py-12 lg:py-20"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeSlide}
-        >
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <motion.div variants={fadeSlide} className="text-white">
-              <h1 className="font-lato font-bold leading-tight">
-                <span className="text-5xl md:text-8xl block">Log In.</span>
-                <span className="text-5xl md:text-8xl block mt-2">
-                  And Join
-                </span>
-                <span className="text-6xl md:text-8xl text-beacon-yellow underline block mt-2">
-                  Free
-                </span>
-              </h1>
-              <p className="text-2xl md:text-3xl mt-6 font-lato">
-                Caring for your mental health and helping you thrive with us.
-              </p>
-            </motion.div>
+        {/* HERO TEXT */}
+        <motion.div variants={fadeSlide} className="text-white">
+          <h1 className="font-lato font-bold leading-tight">
+            <span className="text-5xl md:text-8xl block">Log In.</span>
+            <span className="text-5xl md:text-8xl block mt-2">And Join</span>
+            <span className="text-6xl md:text-8xl text-beacon-yellow underline block mt-2">Free</span>
+          </h1>
+          <p className="text-2xl md:text-3xl mt-6 font-lato">
+            Caring for your mental health and helping you thrive with us.
+          </p>
+        </motion.div>
 
-            <motion.div
-              variants={fadeSlide}
-              className="flex justify-center lg:justify-end"
-            >
-              <div className="w-full max-w-md bg-white/40 backdrop-blur-sm rounded-[50px] py-10 m-10  px-10 md:p-10">
-                <form onSubmit={handleEmailLogin} className="space-y-6">
-                  <div>
-                    <label className="text-xl md:text-2xl font-lato text-gray-900">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full mt-2 h-12 px-4 rounded-lg border-2 border-gray-300 bg-gray-200/20"
-                    />
-                  </div>
+        {/* LOGIN SECTION */}
+        <motion.div variants={fadeSlide} className="flex justify-center m-10 lg:justify-end">
+          <div className="w-full max-w-md bg-white/40 backdrop-blur-sm rounded-[50px] py-10 px-10">
 
-                  <div>
-                    <label className="text-xl md:text-2xl font-lato text-gray-900">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full mt-2 h-12 px-4 rounded-lg border-2 border-gray-300 bg-gray-200/20"
-                    />
-                  </div>
+            <form onSubmit={handleEmailLogin} className="space-y-6">
 
-                  <a href="#" className="text-red-600 text-lg md:text-xl block">
-                    Forget Password
-                  </a>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-beacon-red border-2 border-red-600 text-white text-xl md:text-2xl py-4 rounded-lg font-lato hover:bg-red-700 transition-colors"
-                  >
-                    Log In
-                  </button>
-
-                  <div className="text-center space-y-2">
-                    <button
-                      onClick={handleGoogleLogin}
-                      className="w-full bg-white text-black border-2 border-gray-400 py-3 rounded-lg font-lato hover:bg-gray-100 transition-colors"
-                    >
-                      WITH GMAIL📩
-                    </button>
-                    <a href="/signup" className="text-blue-600 text-2xl block">
-                      Sign Up
-                    </a>
-                  </div>
-                </form>
+              <div>
+                <label className="text-xl md:text-2xl font-lato text-gray-900">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full mt-2 h-12 px-4 rounded-lg border-2 border-gray-300 bg-gray-200/20"
+                />
               </div>
-            </motion.div>
+
+              <div>
+                <label className="text-xl md:text-2xl font-lato text-gray-900">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full mt-2 h-12 px-4 rounded-lg border-2 border-gray-300 bg-gray-200/20"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-beacon-red border-2 border-red-600 text-white text-xl md:text-2xl py-4 rounded-lg font-lato hover:bg-red-700 transition-colors"
+              >
+                Log In
+              </button>
+
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="w-full bg-white text-black border-2 border-gray-400 py-3 rounded-lg font-lato hover:bg-gray-100 transition-colors"
+              >
+                WITH GMAIL 📩
+              </button>
+
+            </form>
+
           </div>
         </motion.div>
-      </section>
 
-      {/* Three Pillars */}
+      </div>
+    </motion.div>
+  </section>
+)}
+
+
+     {isLoggedIn && (
+      <>
       <div className="bg-white py-4">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-4 text-center">
@@ -792,7 +795,7 @@ setLoading(false);
           alt="Final banner"
           className="w-screen h-auto object-cover mx-auto block"
         />
-      </section>
+      </section>)
 
       {/* Footer */}
       <footer className="bg-gray-500 py-12">
@@ -800,6 +803,8 @@ setLoading(false);
           <p className="text-xl">© 2024 Beacon. All rights reserved.</p>
         </div>
       </footer>
+       </>)}
     </div>
+   
   );
 }

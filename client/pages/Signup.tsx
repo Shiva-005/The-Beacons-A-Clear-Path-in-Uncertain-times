@@ -52,7 +52,7 @@ const Signup = () => {
         name: user.displayName,
   email: user.email,
   photoURL: user.photoURL,
-  role: "student",
+  role: role,
   anonymousUsername: generateAnonymousUsername(),
   createdAt: new Date(),
 });
@@ -78,6 +78,7 @@ const Signup = () => {
       });
 
       alert("Google Signup successful!");
+      window.location.href = "/";
     } catch (error: any) {
       alert(error.message);
     }

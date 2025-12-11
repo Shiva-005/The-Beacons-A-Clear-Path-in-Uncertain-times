@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MessageSquare, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { auth, db } from "@/firebase/firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -20,9 +21,13 @@ export default function Header() {
   const [botInitialized, setBotInitialized] = useState(false);
 
   const [user, setUser] = useState<any>(null);
-  const [anonName, setAnonName] = useState<string>("");
-  const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // fallback avatar
+  const [anonName, setAnonName] = useState<string>("User");
+  const navigate = useNavigate();
 
+  const defaultAvatar =
+    "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+  // SCROLL EFFECT
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 80;
@@ -33,6 +38,8 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // AUTH STATE LISTENER
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -42,8 +49,7 @@ export default function Header() {
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          const data = userSnap.data();
-          setAnonName(data.anonymousUsername || "User");
+          setAnonName(userSnap.data().anonymousUsername || "User");
         }
       }
     });
@@ -51,12 +57,15 @@ export default function Header() {
     return () => unsubscribe();
   }, []);
 
+  // FIX: LOGOUT + REDIRECT TO LOGIN PAGE
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/"); // 👈 Redirects back to login page
+  };
+
   const botImage =
     "https://th.bing.com/th/id/OIP.4FuBjYmRvtEXBS-bHi63RQAAAA?w=204&h=186&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
-  const meImage =
-    "https://static.vecteezy.com/system/resources/previews/019/858/376/non_2x/chat-flat-color-outline-icon-free-png.png";
 
-  // Initialize Botpress
   const openChat = () => {
     setChatOpen(true);
 
@@ -97,15 +106,6 @@ export default function Header() {
 
       window.botpress.on("webchat:ready", () => {
         setTimeout(() => window.botpress.open(), 500);
-
-        window.botpress.on("incoming_message", (event: any) => {
-          const text =
-            event.payload?.text || event.payload?.title || event.preview;
-          if (userInteracted && (window as any).responsiveVoice && text) {
-            (window as any).responsiveVoice.cancel();
-            (window as any).responsiveVoice.speak(text, "UK English Male");
-          }
-        });
       });
     } else if (botInitialized) {
       window.botpress.open();
@@ -117,7 +117,7 @@ export default function Header() {
       {/* HEADER */}
       <header
         className={`fixed w-full top-0 z-30 transition-all duration-300 border-b ${
-          compact ? "bg-white/90 shadow-sm py-4" : "bg-white/90 py-6"
+          compact ? "bg-white/90 shadow-sm py-4" : "bg-white/90 py-4"
         }`}
       >
         <nav className="container mx-auto px-4 flex items-center justify-between transition-all duration-300">
@@ -134,37 +134,25 @@ export default function Header() {
           {/* NAV LINKS */}
           {!compact && (
             <div className="hidden sm:flex flex-row font-lato gap-6">
-              <a
-                className="text-4xl font-semibold hover:text-beacon-yellow"
-                href="#"
-              >
+              <a className="text-4xl font-semibold hover:text-beacon-yellow" href="#">
                 Check It
               </a>
-              <a
-                className="text-4xl font-semibold hover:text-beacon-yellow"
-                href="#"
-              >
+              <a className="text-4xl font-semibold hover:text-beacon-yellow" href="#">
                 About Us
               </a>
-              <a
-                className="text-4xl font-semibold hover:text-beacon-yellow"
-                href="#"
-              >
+              <a className="text-4xl font-semibold hover:text-beacon-yellow" href="#">
                 Article
               </a>
-              <a
-                className="text-4xl font-semibold hover:text-beacon-yellow"
-                href="#"
-              >
+              <a className="text-4xl font-semibold hover:text-beacon-yellow" href="#">
                 Help
               </a>
             </div>
           )}
 
           <div className="flex items-center gap-4">
-            {/* ✅ Show Profile If Logged In */}
+            {/* USER AREA WHEN LOGGED IN */}
             {user && (
-              <div className="flex items-center gap-2 mr-2">
+              <div className="flex items-center gap-3 mr-2">
                 <img
                   src={user.photoURL || defaultAvatar}
                   className="w-10 h-10 rounded-full border"
@@ -174,17 +162,25 @@ export default function Header() {
                 <span className="font-semibold text-lg text-gray-800">
                   {anonName}
                 </span>
+
+                {/* LOGOUT BUTTON */}
+                <button
+                  onClick={handleLogout}
+                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition font-lato"
+                >
+                  Logout
+                </button>
               </div>
             )}
 
-            {/* ✅ Sign Up only if NOT logged in */}
+            {/* SIGN UP WHEN NOT LOGGED IN */}
             {!compact && !user && (
               <button className="bg-red-600 text-xl text-white px-6 py-3 rounded-lg font-lato hover:bg-red-700 transition">
                 <a href="/signup">Sign Up</a>
               </button>
             )}
 
-            {/* Bot Icon */}
+            {/* Chatbot Icon */}
             <img
               src={botImage}
               onClick={openChat}
@@ -206,11 +202,11 @@ export default function Header() {
         </nav>
       </header>
 
-      {/* MENU PANEL */}
+      {/* MOBILE MENU */}
       {menuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex">
           <div className="w-72 bg-white h-full shadow-xl p-6 animate-slideIn flex flex-col gap-6">
-            {/* ✅ Show username in menu too */}
+
             {user && (
               <div className="flex items-center gap-2 mb-4">
                 <img
@@ -225,38 +221,41 @@ export default function Header() {
             )}
 
             <h2 className="text-2xl font-bold text-beacon-blue">Menu</h2>
-            <a
-              className="text-xl font-semibold hover:text-beacon-yellow"
-              href="#"
-            >
+
+            <a className="text-xl font-semibold hover:text-beacon-yellow" href="/">
               Check It
             </a>
-            <a
-              className="text-xl font-semibold hover:text-beacon-yellow"
-              href="#"
-            >
+            <a className="text-xl font-semibold hover:text-beacon-yellow" href="#">
               About Us
             </a>
-            <a
-              className="text-xl font-semibold hover:text-beacon-yellow"
-              href="#"
-            >
+            <a className="text-xl font-semibold hover:text-beacon-yellow" href="#">
               Article
             </a>
-            <a
-              className="text-xl font-semibold hover:text-beacon-yellow"
-              href="#"
-            >
+            <a className="text-xl font-semibold hover:text-beacon-yellow" href="#">
               Help
             </a>
 
-            {/* Sign Up in menu only if NOT logged in */}
+            {/* SIGN UP IF NOT LOGGED IN */}
             {!user && (
               <button className="mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">
                 <a href="/signup">Sign Up</a>
               </button>
             )}
+
+            {/* LOGOUT IN MOBILE MENU */}
+            {user && (
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  handleLogout();
+                }}
+                className="mt-4 bg-red-800 text-gray-800 py-2 rounded-lg hover:bg-red-900 transition"
+              >
+                Logout
+              </button>
+            )}
           </div>
+
           <div className="flex-1" onClick={() => setMenuOpen(false)}></div>
         </div>
       )}
@@ -276,7 +275,7 @@ export default function Header() {
         />
       )}
 
-      {/* Tailwind Animation */}
+      {/* Animation */}
       <style jsx>{`
         .animate-slideIn {
           animation: slideIn 0.25s ease-out;

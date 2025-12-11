@@ -1,3 +1,4 @@
+import Header from '@/components/Header';
 import React, { useState, useRef, useEffect, FormEvent, ChangeEvent } from 'react';
 
 // --- API Configuration ---
@@ -119,12 +120,13 @@ const ImageBot: React.FC<ImageBotProps> = ({ onSendMessage, onResetChat, isLoadi
     };
     
     return (
-        <div className="flex flex-col h-screen bg-gray-50 font-sans antialiased">
+        <div className="flex flex-col h-screen bg-yellow-100 font-sans antialiased">
+            <Header/>
             <script src="https://cdn.tailwindcss.com"></script>
-            <div className="flex flex-col w-full max-w-2xl mx-auto shadow-2xl bg-white rounded-lg my-6 h-[90vh]">
+            <div className=" my-[120px] flex flex-col w-full max-w-5xl mx-auto shadow-2xl bg-white rounded-lg  h-[90vh]">
             
                 {/* Header/Controls */}
-                <div className="p-4 border-b border-indigo-100 bg-indigo-600 text-white rounded-t-lg shadow-md flex justify-between items-center sticky top-0 z-10">
+                <div className="p-4 border-b border-beacon-teal bg-indigo-400  text-white rounded-t-lg shadow-md flex justify-between items-center sticky top-0 z-10">
                     <h1 className="text-2xl font-bold tracking-tight">Emotion-Aware Meme Chatbot 💫</h1>
                     <button
                         onClick={onResetChat}
@@ -147,7 +149,7 @@ const ImageBot: React.FC<ImageBotProps> = ({ onSendMessage, onResetChat, isLoadi
                     {/* Loading Indicator */}
                     {isLoading && (
                         <div className="flex justify-start mb-4">
-                            <div className="max-w-xs p-3 rounded-xl bg-gray-200 rounded-tl-none animate-pulse">
+                            <div className="max-w-xs p-3 rounded-xl bg-black rounded-tl-none animate-pulse">
                                 <div className="h-2 w-16 bg-gray-400 rounded mb-1"></div>
                                 <div className="h-2 w-24 bg-gray-400 rounded"></div>
                             </div>
@@ -164,7 +166,7 @@ const ImageBot: React.FC<ImageBotProps> = ({ onSendMessage, onResetChat, isLoadi
                 </div> 
 
                 {/* Input Area */}
-                <form onSubmit={handleSend} className="p-4 border-t border-gray-200 bg-white rounded-b-lg">
+                <form onSubmit={handleSend} className="p-4 border-t border-gray-200 rounded-b-lg">
                     <div className="flex space-x-3">
                         <input
                             type="text"

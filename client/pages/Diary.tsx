@@ -194,13 +194,10 @@ const Diary: React.FC<Props> = ({ accountPassword }) => {
         return 'bg-red-100 text-red-700';
     };
 
-    // --- LOCK UI (shown when not authenticated) ---
-    // If accountPassword prop provided => no "set password" option; show only entry box.
-    // If no accountPassword and no saved password => show set-password UI.
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-6">
-                <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md text-center">
+            <div className="min-h-screen flex flex-col justify-center items-center bg-white p-6">
+                <div className=" p-6 rounded-xl shadow-md w-full max-w-md text-center">
                     <Lock className="w-12 h-12 text-purple-600 mx-auto mb-4" />
                     {(!savedPassword) ? (
                         // No saved password in storage AND no accountPassword prop => allow creating a diary password
@@ -248,7 +245,7 @@ const Diary: React.FC<Props> = ({ accountPassword }) => {
 
     // --- MAIN DIARY UI (unchanged layout) ---
     return (
-        <div className="min-h-screen bg-gray-50 font-sans p-4 md:p-8">
+        <div className="min-h-screen bg-white font-sans p-4 md:p-8">
             <script src="https://cdn.tailwindcss.com"></script>
             <style>
                 {`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Typed from "typed.js";
+import Header from "./Header";
 
 const MusicAssistant: React.FC = () => {
   useEffect(() => {
@@ -27,7 +28,7 @@ const MusicAssistant: React.FC = () => {
     const res = await fetch("http://localhost:5001/detect_mood", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text })
     });
 
     const data = await res.json();
@@ -45,37 +46,63 @@ const MusicAssistant: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-[linear-gradient(135deg,#a8edea,#fed6e3)] flex justify-center items-center">
-      <div className="w-[420px] p-10 rounded-[25px] bg-white/20 backdrop-blur-[15px] 
-                      shadow-[0_0_40px_rgba(0,0,0,0.1)] text-center transition-all 
-                      hover:-translate-y-1 hover:shadow-[0_0_45px_rgba(0,0,0,0.15)]">
+    <div className="min-h-screen bg-beacon-beige flex justify-center items-center relative pt-20 pb-10">
 
-        <h2 className="font-semibold text-gray-800 text-[26px] mb-1">🎧 AI Music Assistant</h2>
+      {/* Keep your header exactly where it is */}
+      <div className="absolute top-0 left-0 w-full">
+        <Header />
+      </div>
 
-        <div className="typing text-[#ff4081] font-medium h-[25px] mt-1"></div>
+      {/* Main Card */}
+      <div
+        className="
+          w-[90%] max-w-[720px] p-10 rounded-[25px] bg-white text-center 
+          border border-white shadow-[0_0_25px_rgba(255,255,255,0.4)]
+          backdrop-blur-md
+          transition-all duration-300
+        "
+      >
+        {/* Title */}
+        <h2 className="font-semibold text-gray-800 text-[26px] mb-2 tracking-wide">
+          🎧 AI Music Assistant
+        </h2>
 
+        {/* Typing Animation */}
+        <div className="typing text-[#ff4081] font-medium h-[25px] mb-4 text-[18px]"></div>
+
+        {/* Input */}
         <input
           id="moodText"
           type="text"
           placeholder="Type how you feel... 🧠💬"
-          className="mt-5 w-[85%] p-3 rounded-[12px] bg-white/90 text-[15px]
-                     shadow-inner border-none outline-none transition 
-                     focus:scale-[1.03] focus:shadow-[0_0_8px_#ff80ab]"
+          className="
+            mt-4 w-[85%] p-3 rounded-[12px]
+            bg-white/90 text-[15px] shadow-inner border border-gray-200
+            outline-none transition-all duration-200
+            focus:scale-[1.03]
+            focus:shadow-[0_0_12px_#ff80ab]
+          "
         />
 
+        {/* Button */}
         <button
           onClick={detectMood}
-          className="mt-5 px-5 py-3 rounded-[12px] 
-                     bg-[linear-gradient(90deg,#ff80ab,#ff4081)] text-white font-medium 
-                     transition hover:bg-[linear-gradient(90deg,#ff4081,#ff80ab)] 
-                     hover:scale-[1.05]"
+          className="
+            mt-6 px-6 py-3 rounded-[12px]
+            bg-[linear-gradient(90deg,#ff80ab,#ff4081)] text-white font-medium 
+            transition-all duration-200
+            hover:scale-[1.07]
+            hover:shadow-[0_4px_15px_rgba(255,64,129,0.4)]
+          "
         >
           Find My Music 🎶
         </button>
 
+        {/* Mood Result */}
         <div id="result" className="mt-6 text-[18px] font-medium text-[#444]"></div>
 
-        <div id="musicPlayer"></div>
+        {/* Music Player */}
+        <div id="musicPlayer" className="mt-4"></div>
       </div>
     </div>
   );
