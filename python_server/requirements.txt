@@ -1,25 +1,5 @@
-# Web Server & Routing
 Flask==3.0.3
-Werkzeug==3.1.5
-gunicorn==23.0.0
 flask-cors==4.0.0
-
-# Data & NLP (Based on your logs)
-nltk==3.9.2
-textblob==0.19.0
-regex==2025.11.3
-joblib==1.5.3
-
-# Utilities
 requests==2.32.3
-tqdm==4.67.1
-MarkupSafe==3.0.3
-Jinja2==3.1.6
-blinker==1.9.0
-certifi==2026.1.4
-charset-normalizer==3.4.4
-click==8.3.1
-idna-3.11
-itsdangerous==2.2.0
-packaging==25.0
-urllib3==2.6.3
+gunicorn
+textblob
