@@ -17,6 +17,10 @@ export function createServer() {
     res.json({ message: ping });
   });
 
+  app.get("/signup",(req,res)=>{
+    res.render('signup',{message:"hello"});
+  })
+
   app.get("/api/demo", handleDemo);
 
   return app;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
@@ -111,6 +112,12 @@ export default function Header() {
       window.botpress.open();
     }
   };
+=======
+import { link } from "fs";
+
+
+export default function Header() {
+>>>>>>> 39feef7 (temp commit)
 
   return (
     <>
@@ -199,6 +206,7 @@ export default function Header() {
               </button>
             )}
           </div>
+<<<<<<< HEAD
         </nav>
       </header>
 
@@ -254,6 +262,20 @@ export default function Header() {
                 Logout
               </button>
             )}
+=======
+          
+          <div className="hidden md:flex items-center gap-10">
+            <a href="#" className="text-4xl font-lato font-semibold  text-black hover:text-beacon-yellow transition-colors">Check It</a>
+            <a href="#" className="text-4xl font-lato font-semibold  text-black hover:text-beacon-yellow transition-colors">About Us</a>
+            <a href="#" className="text-4xl font-lato font-semibold text-black hover:text-beacon-yellow transition-colors">Article</a>
+            <a href="#" className="text-4xl font-lato font-semibold  text-black hover:text-beacon-yellow transition-colors">Help</a>
+            
+          </div>
+          <div>
+            <button className="bg-red-600 text-2xl  text-white px-7 py-4 rounded-lg font-lato hover:bg-red-700 transition-colors" onClick={()=>window.location.href = "/signup"}>
+              Sign Up
+            </button>
+>>>>>>> 39feef7 (temp commit)
           </div>
 
           <div className="flex-1" onClick={() => setMenuOpen(false)}></div>

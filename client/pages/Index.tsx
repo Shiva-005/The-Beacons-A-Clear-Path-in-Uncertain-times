@@ -3,8 +3,14 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import { motion, Variants } from "framer-motion";
+<<<<<<< HEAD
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import Data from "../components/cardDetails/storage.json";
+=======
+import ThoughtDetox from "../components/ui/ThoughtDetox"
+import { useNavigate } from "react-router-dom";
+
+>>>>>>> 39feef7 (temp commit)
 type Img = { src: string; ratio: string };
 import { auth, googleProvider,db } from "@/firebase/firebaseConfig";
 import { getDoc, doc } from "firebase/firestore";
@@ -73,6 +79,7 @@ function ImageRow({ imgs, rowIdx }: { imgs: Img[]; rowIdx?: number }) {
 }
 
 export default function Index() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showCards, setShowCards] = useState(false);
@@ -192,6 +199,7 @@ setLoading(false);
     },
   ];
 
+  const navigate = useNavigate();
   return (
     <div className="w-full overflow-x-hidden">
       {/* HERO with background image rows */}
@@ -356,6 +364,7 @@ setLoading(false);
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-4 h-4 bg-black rounded-full"></div>
 
               <div className="bg-white/50 rounded-[40px] p-4 mt-10 mx-4">
+<<<<<<< HEAD
                 <h3 className="text-2xl md:text-2xl font-bowlby text-beacon-blue mb-4">
                   Mentally Anxious
                 </h3>
@@ -363,6 +372,13 @@ setLoading(false);
                   Use Beacon for Better experience
                 </p>
               </div>
+=======
+                <h3 className="text-2xl md:text-2xl font-bowlby text-beacon-blue mb-4">Mentally Anxious</h3>
+                <p className="text-xl md:text-2xl font-lato mb-8">Use Beacon for Better experience</p>
+              </div>
+
+
+>>>>>>> 39feef7 (temp commit)
             </div>
 
             {/* right - avatar + speech bubble */}
@@ -391,6 +407,10 @@ setLoading(false);
             </span>
             <span className="font-bowlby text-beacon-blue"> Beacon.</span>
           </h2>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 39feef7 (temp commit)
         </div>
       </section>
 
@@ -701,6 +721,7 @@ setLoading(false);
             <span className="font-bowlby text-beacon-blue">Beacon</span>
           </h2>
 
+<<<<<<< HEAD
 <div className="flex flex-wrap justify-center gap-4 mb-12">
   {[
     { name: "Article", path: "/article" },
@@ -718,6 +739,22 @@ setLoading(false);
     </Link>
   ))}
 </div>
+=======
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {["Article", "Music", "Diary", "SafeSpace", "Meditation Video"].map((tab) => (
+              <button key={tab} className="bg-green-600 text-white text-2xl md:text-3xl font-lato font-bold px-8 py-4 rounded-3xl border-2 border-black hover:bg-green-700 transition-colors">
+                {tab}
+              </button>
+            ))}
+            <button
+              className="bg-green-600 text-white text-2xl md:text-3xl font-lato font-bold px-8 py-4 rounded-3xl border-2 border-black hover:bg-green-700 transition-colors"
+              onClick={() => navigate("/thought-detox")}
+            >
+              Thought Detox
+            </button>
+          </div>
+
+>>>>>>> 39feef7 (temp commit)
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               "\"It's okay to not be okay — what matters is taking the next small step toward healing.\" Reminds people that healing isn't instant — it's progress, not perfection.",
